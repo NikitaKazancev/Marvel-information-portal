@@ -1,34 +1,53 @@
 import { Component } from 'react/cjs/react.production.min';
+import { transformString } from '../../services/functions';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import MarvelService from '../../services/MarvelService';
 
 export default class RandomChar extends Component {
+	constructor(props) {
+		super(props);
+		this.updateChar();
+	}
+
 	state = {
-		name: null,
-		descr: null,
-		thumbnail: null,
-		homepage: null,
-		wiki: null
+		character: {
+			name: null,
+			description: null,
+			thumbnail: null,
+			homepage: null,
+			wiki: null
+		}
 	};
 
-	// updateChar = () => {
-	// 	const id = 1011005;
-	// 	new MarvelService().getCharacter(id)
-	// 		.then(res);
-	// }
+	updateChar = () => {
+		new MarvelService()
+			.getCharacter(
+				Math.floor(Math.random() * (1011500 - 1010701) + 1010701)
+			)
+			.then((character) => this.setState({ character }));
+	};
 
 	render() {
-		const { name, descr, thumbnail, homepage, wiki } = this.state;
+		const {
+			character: { name, description, thumbnail, homepage, wiki }
+		} = this.state;
+
+		const descr =
+			description || `At the moment there's no info about ${name}`;
 
 		return (
 			<div className='randomchar'>
 				<div className='randomchar__block'>
-					<img src={thumbnail} alt='Random character' className='randomchar__img' />
+					<img
+						src={thumbnail}
+						alt='Random character'
+						className='randomchar__img'
+					/>
 					<div className='randomchar__info'>
 						<p className='randomchar__name'>{name}</p>
-						<p className='randomchar__descr'>{descr}</p>
+						<p className='randomchar__descr'>{transformString(descr)}</p>
 						<div className='randomchar__btns'>
 							<a href={homepage} className='button button__main'>
 								<div className='inner'>homepage</div>
@@ -46,9 +65,15 @@ export default class RandomChar extends Component {
 					</p>
 					<p className='randomchar__title'>Or choose another one</p>
 					<button className='button button__main'>
-						<div className='inner'>try it</div>
+						<div className='inner' onClick={this.updateChar}>
+							try it
+						</div>
 					</button>
-					<img src={mjolnir} alt='mjolnir' className='randomchar__decoration' />
+					<img
+						src={mjolnir}
+						alt='mjolnir'
+						className='randomchar__decoration'
+					/>
 				</div>
 			</div>
 		);
