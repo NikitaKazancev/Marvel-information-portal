@@ -4,7 +4,7 @@ export const transformString = (str, maxLen = 200) => {
 
 		let index = str.length;
 		for (let i = str.length; i >= 0; i--) {
-			if (str[i] != ' ') index--;
+			if (str[i] !== ' ') index--;
 			else break;
 		}
 

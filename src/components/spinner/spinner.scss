@@ -1,0 +1,113 @@
+.spinner-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+@keyframes spinner__inner {
+	0% {
+		transform: rotate(0);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+.spinner__inner div {
+	box-sizing: border-box !important;
+}
+.spinner__inner > div {
+	position: absolute;
+	width: 72.72px;
+	height: 72.72px;
+	top: 14.14px;
+	left: 14.14px;
+	border-radius: 50%;
+	border: 8.08px solid #000;
+	border-color: #e15b64 transparent #e15b64 transparent;
+	animation: spinner__inner 1s linear infinite;
+}
+
+.spinner__inner > div:nth-child(2),
+.spinner__inner > div:nth-child(4) {
+	width: 54.54px;
+	height: 54.54px;
+	top: 23.23px;
+	left: 23.23px;
+	animation: spinner__inner 1s linear infinite reverse;
+}
+.spinner__inner > div:nth-child(2) {
+	border-color: transparent #f8b26a transparent #f8b26a;
+}
+.spinner__inner > div:nth-child(3) {
+	border-color: transparent;
+}
+.spinner__inner > div:nth-child(3) div {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform: rotate(45deg);
+}
+.spinner__inner > div:nth-child(3) div:before,
+.spinner__inner > div:nth-child(3) div:after {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 8.08px;
+	height: 8.08px;
+	top: -8.08px;
+	left: 24.240000000000002px;
+	background: #e15b64;
+	border-radius: 50%;
+	box-shadow: 0 64.64px 0 0 #e15b64;
+}
+.spinner__inner > div:nth-child(3) div:after {
+	left: -8.08px;
+	top: 24.240000000000002px;
+	box-shadow: 64.64px 0 0 0 #e15b64;
+}
+
+.spinner__inner > div:nth-child(4) {
+	border-color: transparent;
+}
+.spinner__inner > div:nth-child(4) div {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	transform: rotate(45deg);
+}
+.spinner__inner > div:nth-child(4) div:before,
+.spinner__inner > div:nth-child(4) div:after {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 8.08px;
+	height: 8.08px;
+	top: -8.08px;
+	left: 15.15px;
+	background: #f8b26a;
+	border-radius: 50%;
+	box-shadow: 0 46.46px 0 0 #f8b26a;
+}
+.spinner__inner > div:nth-child(4) div:after {
+	left: -8.08px;
+	top: 15.15px;
+	box-shadow: 46.46px 0 0 0 #f8b26a;
+}
+.spinner {
+	width: 101px;
+	height: 101px;
+	display: inline-block;
+	overflow: hidden;
+	background: #ffffff;
+}
+.spinner__inner {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	transform: translateZ(0) scale(1);
+	backface-visibility: hidden;
+	transform-origin: 0 0; /* see note above */
+}
+.spinner__inner div {
+	box-sizing: content-box;
+}
