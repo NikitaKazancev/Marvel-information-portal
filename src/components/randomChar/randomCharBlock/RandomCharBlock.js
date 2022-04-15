@@ -1,21 +1,29 @@
 import { transformString } from '../../../services/functions';
 
-const RandomCharBlock = ({ name, description, thumbnail, homepage, wiki }) => (
-	<div className='randomchar__block'>
-		<img src={thumbnail} alt='Random character' className='randomchar__img' />
-		<div className='randomchar__info'>
-			<p className='randomchar__name'>{name}</p>
-			<p className='randomchar__descr'>{transformString(description)}</p>
-			<div className='randomchar__btns'>
-				<a href={homepage} className='button button__main'>
-					<div className='inner'>homepage</div>
-				</a>
-				<a href={wiki} className='button button__secondary'>
-					<div className='inner'>Wiki</div>
-				</a>
+const RandomCharBlock = ({ name, description, thumbnail, homepage, wiki }) => {
+	description = description || `At the moment there's no info about ${name}`;
+
+	let imageClasses = 'randomchar__img';
+	if (~thumbnail.search('image_not_available'))
+		imageClasses += ' randomchar__img_nothing';
+
+	return (
+		<div className='randomchar__block'>
+			<img src={thumbnail} alt='Random character' className={imageClasses} />
+			<div className='randomchar__info'>
+				<p className='randomchar__name'>{name}</p>
+				<p className='randomchar__descr'>{transformString(description)}</p>
+				<div className='randomchar__btns'>
+					<a href={homepage} className='button button__main'>
+						<div className='inner'>homepage</div>
+					</a>
+					<a href={wiki} className='button button__secondary'>
+						<div className='inner'>Wiki</div>
+					</a>
+				</div>
 			</div>
 		</div>
-	</div>
-);
+	);
+};
 
 export default RandomCharBlock;

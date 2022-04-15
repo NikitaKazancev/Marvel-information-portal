@@ -25,11 +25,13 @@ export default class MarvelService {
 	};
 
 	_transformCharacterData = ({
+		id,
 		name,
 		description,
 		thumbnail: { path, extension },
 		urls
 	}) => ({
+		id,
 		name,
 		description,
 		thumbnail: `${path}.${extension}`,

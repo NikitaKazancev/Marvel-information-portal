@@ -2,15 +2,13 @@ import { Component } from 'react/cjs/react.production.min';
 
 import './randomChar.scss';
 import MarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinner';
+import Spinner from '../../generalComponents/spinner/Spinner';
 import RandomCharStatic from './randomCharStatic/RandomCharStatic';
 import RandomCharBlock from './randomCharBlock/RandomCharBlock';
+import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
 
 export default class RandomChar extends Component {
-	constructor(props) {
-		super(props);
-		this.updateChar();
-	}
+	marvelService = new MarvelService();
 
 	state = {
 		character: {
@@ -21,35 +19,46 @@ export default class RandomChar extends Component {
 			wiki: null
 		},
 
-		loading: true
+		loading: false,
+		error: false
+	};
+
+	componentWillMount() {
+		this.updateChar();
+	}
+
+	catchError = () => {
+		this.setState({ error: true, loading: false });
+		setTimeout(() => {
+			document.querySelector('.error').classList.remove('error_show');
+			setTimeout(() => this.setState({ error: false }), 1000);
+		}, 4000);
 	};
 
 	updateChar = () => {
 		this.setState({ loading: true });
 
-		new MarvelService()
+		this.marvelService
 			.getCharacter(
 				Math.floor(Math.random() * (1011500 - 1010701) + 1010701)
 			)
-			.then((character) => this.setState({ character, loading: false }));
+			.then((character) => this.setState({ character, loading: false }))
+			.catch(() => this.catchError());
 	};
 
 	render() {
-		const { character, loading } = this.state;
-		const { description, name } = character;
+		const { character, loading, error } = this.state;
 
-		const descr =
-			description || `At the moment there's no info about ${name}`;
-
-		const characterContent = loading ? (
+		const content = loading ? (
 			<Spinner />
 		) : (
-			<RandomCharBlock {...character} description={descr} />
+			<RandomCharBlock {...character} />
 		);
 
 		return (
 			<div className='randomchar'>
-				{characterContent}
+				{content}
+				{error ? <ErrorMessage /> : null}
 				<RandomCharStatic onUpdateChar={this.updateChar} />
 			</div>
 		);
