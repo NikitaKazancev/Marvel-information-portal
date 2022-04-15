@@ -29,13 +29,19 @@ export default class MarvelService {
 		name,
 		description,
 		thumbnail: { path, extension },
-		urls
-	}) => ({
-		id,
-		name,
-		description,
-		thumbnail: `${path}.${extension}`,
-		homepage: urls[0].url,
-		wiki: urls[1].url
-	});
+		urls,
+		comics
+	}) => {
+		description =
+			description || `At the moment there's no info about ${name}`;
+		return {
+			id,
+			name,
+			description,
+			thumbnail: `${path}.${extension}`,
+			homepage: urls[0].url,
+			wiki: urls[1].url,
+			comics: comics.items
+		};
+	};
 }

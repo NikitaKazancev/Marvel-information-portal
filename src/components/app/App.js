@@ -15,15 +15,28 @@ class App extends Component {
 		this.setState({ selectedChar: id });
 	};
 
+	onError = () => {
+		setTimeout(() => {
+			document.querySelector('.error').classList.remove('error_show');
+			setTimeout(() => this.setState({ error: false }), 1000);
+		}, 4000);
+	};
+
 	render() {
 		return (
 			<div className='app'>
 				<AppHeader />
 				<main>
-					<RandomChar />
+					<RandomChar onError={this.onError} />
 					<div className='char__content'>
-						<CharList onSelectChar={this.onSelectChar} />
-						<CharInfo />
+						<CharList
+							onSelectChar={this.onSelectChar}
+							onError={this.onError}
+						/>
+						<CharInfo
+							charId={this.state.selectedChar}
+							onError={this.onError}
+						/>
 					</div>
 					<img className='bg-decoration' src={decoration} alt='vision' />
 				</main>

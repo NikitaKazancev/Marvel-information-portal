@@ -1,8 +1,6 @@
 import { transformString } from '../../../services/functions';
 
 const RandomCharBlock = ({ name, description, thumbnail, homepage, wiki }) => {
-	description = description || `At the moment there's no info about ${name}`;
-
 	let imageClasses = 'randomchar__img';
 	if (~thumbnail.search('image_not_available'))
 		imageClasses += ' randomchar__img_nothing';

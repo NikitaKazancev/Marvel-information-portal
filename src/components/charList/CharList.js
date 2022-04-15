@@ -21,7 +21,7 @@ export default class CharList extends Component {
 		this.setState({ loading: true });
 
 		this.marvelService
-			.getAllCharacters(1)
+			.getAllCharacters(9)
 			.then((characters) =>
 				this.setState({
 					characters: [
@@ -80,7 +80,7 @@ const CharListItem = ({ thumbnail, name, onSelectChar }) => {
 
 	return (
 		<div className='char__item' onClick={onSelectChar}>
-			<img src={thumbnail} alt='list_img' className={imageClasses} />
+			<img src={thumbnail} alt={name} className={imageClasses} />
 			<div className='char__name'>{name}</div>
 		</div>
 	);

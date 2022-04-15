@@ -29,10 +29,7 @@ export default class RandomChar extends Component {
 
 	catchError = () => {
 		this.setState({ error: true, loading: false });
-		setTimeout(() => {
-			document.querySelector('.error').classList.remove('error_show');
-			setTimeout(() => this.setState({ error: false }), 1000);
-		}, 4000);
+		this.props.onError();
 	};
 
 	updateChar = () => {
@@ -42,7 +39,12 @@ export default class RandomChar extends Component {
 			.getCharacter(
 				Math.floor(Math.random() * (1011500 - 1010701) + 1010701)
 			)
-			.then((character) => this.setState({ character, loading: false }))
+			.then(({ name, description, thumbnail, homepage, wiki }) =>
+				this.setState({
+					character: { name, description, thumbnail, homepage, wiki },
+					loading: false
+				})
+			)
 			.catch(() => this.catchError());
 	};
 
