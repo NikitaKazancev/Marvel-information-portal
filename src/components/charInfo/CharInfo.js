@@ -12,7 +12,7 @@ class CharInfo extends Component {
 	state = {
 		character: null,
 		loading: false,
-		error: false
+		error: false,
 	};
 
 	componentDidMount() {
@@ -37,10 +37,10 @@ class CharInfo extends Component {
 						thumbnail,
 						homepage,
 						wiki,
-						comics
+						comics,
 					},
 					loading: false,
-					error: false
+					error: false,
 				})
 			)
 			.catch(this.catchError);
@@ -54,10 +54,12 @@ class CharInfo extends Component {
 	render() {
 		const { character, loading, error } = this.state;
 
-		let content = character ? loading ? (
-			<Spinner />
-		) : (
-			<CharInfoContent {...character} />
+		let content = character ? (
+			loading ? (
+				<Spinner />
+			) : (
+				<CharInfoContent {...character} />
+			)
 		) : (
 			<Skeleton />
 		);
@@ -77,7 +79,7 @@ const CharInfoContent = ({
 	thumbnail,
 	homepage,
 	wiki,
-	comics
+	comics,
 }) => {
 	let imageClasses = 'char__basics-img';
 	if (~thumbnail.search('image_not_available'))
@@ -90,7 +92,7 @@ const CharInfoContent = ({
 	}
 
 	return (
-		<Fragment>
+		<>
 			<div className='char__basics'>
 				<img src={thumbnail} alt={name} className={imageClasses} />
 				<div>
@@ -108,17 +110,15 @@ const CharInfoContent = ({
 			<div className='char__descr'>{description}</div>
 			<div className='char__comics'>Comics:</div>
 			<ul className='char__comics-list'>
-				{newComics.length ? (
-					newComics.map(({ name }, id) => (
-						<li className='char__comics-item' key={id}>
-							{name}
-						</li>
-					))
-				) : (
-					'No comics yet'
-				)}
+				{newComics.length
+					? newComics.map(({ name }, id) => (
+							<li className='char__comics-item' key={id}>
+								{name}
+							</li>
+					  ))
+					: 'No comics yet'}
 			</ul>
-		</Fragment>
+		</>
 	);
 };
 

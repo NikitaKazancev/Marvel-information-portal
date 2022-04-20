@@ -2,7 +2,7 @@ import { transformString } from '../../../services/functions';
 
 const RandomCharBlock = ({ name, description, thumbnail, homepage, wiki }) => {
 	let imageClasses = 'randomchar__img';
-	if (~thumbnail.search('image_not_available'))
+	if (thumbnail && thumbnail.includes('image_not_available'))
 		imageClasses += ' randomchar__img_nothing';
 
 	return (

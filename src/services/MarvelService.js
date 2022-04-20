@@ -1,8 +1,10 @@
 export default class MarvelService {
 	_apiKey = 'apikey=80d1823509a50e401b71216ea4fb0330';
 	_baseUrl = `https://gateway.marvel.com:443/v1/public/`;
+	maxId = 1011500;
+	minId = 1010701;
 
-	getData = async (url) => {
+	getData = async url => {
 		const res = await fetch(url);
 
 		if (!res.ok) {
@@ -12,17 +14,31 @@ export default class MarvelService {
 		return await res.json();
 	};
 
-	getCharacter = async (id) => {
-		return await this.getData(
+	getCharacter = async id =>
+		await this.getData(
 			`${this._baseUrl}characters/${id}?${this._apiKey}`
-		).then((res) => this._transformCharacterData(res.data.results[0]));
-	};
+		).then(res => this._transformCharacterData(res.data.results[0]));
 
 	getAllCharacters = async (amount = 9) => {
-		return await this.getData(
-			`${this._baseUrl}characters?limit=${amount}&offset=200&${this._apiKey}`
-		).then((res) => res.data.results.map(this._transformCharacterData));
+		const {
+			maxId,
+			minId,
+			getData,
+			_baseUrl,
+			_apiKey,
+			_transformCharacterData,
+		} = this;
+
+		const randomOffset = Math.floor(Math.random() * (maxId - minId - amount));
+		return await getData(
+			`${_baseUrl}characters?limit=${amount}&offset=${randomOffset}&${_apiKey}`
+		).then(res => res.data.results.map(_transformCharacterData));
 	};
+
+	getRandomCharacter = async () =>
+		await this.getCharacter(
+			Math.floor(Math.random() * (this.maxId - this.minId) + this.minId)
+		);
 
 	_transformCharacterData = ({
 		id,
@@ -30,10 +46,12 @@ export default class MarvelService {
 		description,
 		thumbnail: { path, extension },
 		urls,
-		comics
+		comics,
 	}) => {
-		description =
-			description || `At the moment there's no info about ${name}`;
+		if (description.includes('</p>')) description = description.slice(16, -4);
+		else
+			description =
+				description || `At the moment there's no info about ${name}`;
 		return {
 			id,
 			name,
@@ -41,7 +59,7 @@ export default class MarvelService {
 			thumbnail: `${path}.${extension}`,
 			homepage: urls[0].url,
 			wiki: urls[1].url,
-			comics: comics.items
+			comics: comics.items,
 		};
 	};
 }

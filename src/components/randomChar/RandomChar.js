@@ -16,11 +16,11 @@ export default class RandomChar extends Component {
 			description: null,
 			thumbnail: null,
 			homepage: null,
-			wiki: null
+			wiki: null,
 		},
 
 		loading: false,
-		error: false
+		error: false,
 	};
 
 	componentWillMount() {
@@ -36,13 +36,11 @@ export default class RandomChar extends Component {
 		this.setState({ loading: true });
 
 		this.marvelService
-			.getCharacter(
-				Math.floor(Math.random() * (1011500 - 1010701) + 1010701)
-			)
+			.getRandomCharacter()
 			.then(({ name, description, thumbnail, homepage, wiki }) =>
 				this.setState({
 					character: { name, description, thumbnail, homepage, wiki },
-					loading: false
+					loading: false,
 				})
 			)
 			.catch(() => this.catchError());

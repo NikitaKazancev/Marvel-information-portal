@@ -2,16 +2,17 @@ import AppHeader from '../appHeader/AppHeader';
 import RandomChar from '../randomChar/RandomChar';
 import CharList from '../charList/CharList';
 import CharInfo from '../charInfo/CharInfo';
+import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 
 import decoration from '../../resources/img/vision.png';
 import { Component } from 'react/cjs/react.production.min';
 
 class App extends Component {
 	state = {
-		selectedChar: null
+		selectedChar: null,
 	};
 
-	onSelectChar = (id) => {
+	onSelectChar = id => {
 		this.setState({ selectedChar: id });
 	};
 
@@ -27,16 +28,22 @@ class App extends Component {
 			<div className='app'>
 				<AppHeader />
 				<main>
-					<RandomChar onError={this.onError} />
+					<ErrorBoundary>
+						<RandomChar onError={this.onError} />
+					</ErrorBoundary>
 					<div className='char__content'>
-						<CharList
-							onSelectChar={this.onSelectChar}
-							onError={this.onError}
-						/>
-						<CharInfo
-							charId={this.state.selectedChar}
-							onError={this.onError}
-						/>
+						<ErrorBoundary>
+							<CharList
+								onSelectChar={this.onSelectChar}
+								onError={this.onError}
+							/>
+						</ErrorBoundary>
+						<ErrorBoundary>
+							<CharInfo
+								charId={this.state.selectedChar}
+								onError={this.onError}
+							/>
+						</ErrorBoundary>
 					</div>
 					<img className='bg-decoration' src={decoration} alt='vision' />
 				</main>
