@@ -19,7 +19,7 @@ export default class MarvelService {
 			`${this._baseUrl}characters/${id}?${this._apiKey}`
 		).then(res => this._transformCharacterData(res.data.results[0]));
 
-	getAllCharacters = async (amount = 9) => {
+	getCharacters = async (amount = 9) => {
 		const {
 			maxId,
 			minId,

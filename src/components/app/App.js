@@ -1,3 +1,5 @@
+import { Component } from 'react/cjs/react.production.min';
+
 import AppHeader from '../appHeader/AppHeader';
 import RandomChar from '../randomChar/RandomChar';
 import CharList from '../charList/CharList';
@@ -5,7 +7,6 @@ import CharInfo from '../charInfo/CharInfo';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 
 import decoration from '../../resources/img/vision.png';
-import { Component } from 'react/cjs/react.production.min';
 
 class App extends Component {
 	state = {

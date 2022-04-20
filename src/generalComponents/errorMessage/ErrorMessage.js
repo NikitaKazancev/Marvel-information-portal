@@ -1,4 +1,5 @@
 import { Component } from 'react/cjs/react.production.min';
+
 import './errorMessage.scss';
 
 export default class ErrorMessage extends Component {

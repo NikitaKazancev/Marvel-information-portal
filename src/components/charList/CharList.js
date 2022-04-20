@@ -1,16 +1,19 @@
 import { Component } from 'react/cjs/react.production.min';
+import propTypes from 'prop-types';
+
 import Spinner from '../../generalComponents/spinner/Spinner';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
 import MarvelService from '../../services/MarvelService';
+
 import './charList.scss';
 
-export default class CharList extends Component {
+class CharList extends Component {
 	marvelService = new MarvelService();
 
 	state = {
 		characters: [],
 		loading: true,
-		error: false
+		error: false,
 	};
 
 	componentDidMount() {
@@ -21,20 +24,20 @@ export default class CharList extends Component {
 		this.setState({ loading: true });
 
 		this.marvelService
-			.getAllCharacters(9)
-			.then((characters) =>
-				this.setState({
+			.getCharacters(9)
+			.then(newCharacters =>
+				this.setState(state => ({
 					characters: [
-						...this.state.characters,
-						...characters.map(({ id, name, thumbnail }) => ({
+						...state.characters,
+						...newCharacters.map(({ id, name, thumbnail }) => ({
 							id,
 							name,
-							thumbnail
-						}))
+							thumbnail,
+						})),
 					],
 					error: false,
-					loading: false
-				})
+					loading: false,
+				}))
 			)
 			.catch(this.onError);
 	};
@@ -44,19 +47,34 @@ export default class CharList extends Component {
 		this.props.onError();
 	};
 
+	itemsRefs = [];
+	setRef = elem => this.itemsRefs.push(elem);
+
+	onSelectedRef = i => {
+		this.itemsRefs.forEach(elem =>
+			elem.classList.remove('char__item_selected')
+		);
+		this.itemsRefs[i].classList.add('char__item_selected');
+		this.itemsRefs[i].focus();
+	};
+
 	render() {
 		const { characters, error, loading } = this.state;
 
 		return (
 			<div className='char__list'>
 				<ul className='char__grid'>
-					{characters.map((char) => {
+					{characters.map((char, i) => {
 						const { id, ...data } = char;
 						return (
 							<CharListItem
 								{...data}
 								key={id}
-								onSelectChar={() => this.props.onSelectChar(id)}
+								setRef={this.setRef}
+								onSelectChar={() => {
+									this.props.onSelectChar(id);
+									this.onSelectedRef(i);
+								}}
 							/>
 						);
 					})}
@@ -64,8 +82,10 @@ export default class CharList extends Component {
 				{loading ? <Spinner /> : null}
 				{error ? <ErrorMessage /> : null}
 				<button
+					disabled={loading}
 					className='button button__main button__long'
-					onClick={this.getNewCharacters}>
+					onClick={this.getNewCharacters}
+				>
 					<div className='inner'>load more</div>
 				</button>
 			</div>
@@ -73,15 +93,26 @@ export default class CharList extends Component {
 	}
 }
 
-const CharListItem = ({ thumbnail, name, onSelectChar }) => {
+const CharListItem = ({ thumbnail, name, onSelectChar, setRef }) => {
 	let imageClasses = 'char__item-img';
 	if (~thumbnail.search('image_not_available'))
 		imageClasses += ' char__item-img_nothing';
 
 	return (
-		<div className='char__item' onClick={onSelectChar}>
+		<div
+			ref={setRef}
+			className='char__item'
+			onClick={onSelectChar}
+			tabIndex={0}
+		>
 			<img src={thumbnail} alt={name} className={imageClasses} />
 			<div className='char__name'>{name}</div>
 		</div>
 	);
 };
+
+CharList.propTypes = {
+	onSelectChar: propTypes.func,
+};
+
+export default CharList;

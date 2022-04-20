@@ -1,11 +1,14 @@
 import { Component } from 'react/cjs/react.production.min';
 
-import './randomChar.scss';
+import { createPortal } from 'react-dom';
+
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../../generalComponents/spinner/Spinner';
 import RandomCharStatic from './randomCharStatic/RandomCharStatic';
 import RandomCharBlock from './randomCharBlock/RandomCharBlock';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
+
+import './randomChar.scss';
 
 export default class RandomChar extends Component {
 	marvelService = new MarvelService();
@@ -58,9 +61,17 @@ export default class RandomChar extends Component {
 		return (
 			<div className='randomchar'>
 				{content}
-				{error ? <ErrorMessage /> : null}
+				{error ? (
+					<ErrorPortal>
+						<ErrorMessage />
+					</ErrorPortal>
+				) : null}
 				<RandomCharStatic onUpdateChar={this.updateChar} />
 			</div>
 		);
 	}
 }
+
+const ErrorPortal = ({ children }) => {
+	return createPortal(children, document.querySelector('body'));
+};

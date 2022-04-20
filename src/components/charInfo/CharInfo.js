@@ -1,11 +1,12 @@
-import './charInfo.scss';
-import { Fragment } from 'react/cjs/react.development';
 import { Component } from 'react/cjs/react.production.min';
+import propTypes from 'prop-types';
+
 import Spinner from '../../generalComponents/spinner/Spinner';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 import MarvelService from '../../services/MarvelService';
 
+import './charInfo.scss';
 class CharInfo extends Component {
 	marvelService = new MarvelService();
 
@@ -98,10 +99,18 @@ const CharInfoContent = ({
 				<div>
 					<div className='char__info-name'>{name}</div>
 					<div className='char__btns'>
-						<a href={homepage} className='button button__main'>
+						<a
+							target='_blank'
+							href={homepage}
+							className='button button__main'
+						>
 							<div className='inner'>Homepage</div>
 						</a>
-						<a href={wiki} className='button button__secondary'>
+						<a
+							target='_blank'
+							href={wiki}
+							className='button button__secondary'
+						>
 							<div className='inner'>Wiki</div>
 						</a>
 					</div>
@@ -120,6 +129,10 @@ const CharInfoContent = ({
 			</ul>
 		</>
 	);
+};
+
+CharInfo.propTypes = {
+	charId: propTypes.number,
 };
 
 export default CharInfo;
