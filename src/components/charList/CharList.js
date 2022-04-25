@@ -1,97 +1,84 @@
-import { Component } from 'react/cjs/react.production.min';
+import { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
 import Spinner from '../../generalComponents/spinner/Spinner';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
-import MarvelService from '../../services/MarvelService';
+import { marvelService } from '../../services/MarvelService';
 
 import './charList.scss';
 
-class CharList extends Component {
-	marvelService = new MarvelService();
+const CharList = ({ onError, onSelectChar }) => {
+	const [characters, setCharacters] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
 
-	state = {
-		characters: [],
-		loading: true,
-		error: false,
-	};
+	const getNewCharacters = () => {
+		setLoading(true);
 
-	componentDidMount() {
-		this.getNewCharacters();
-	}
-
-	getNewCharacters = () => {
-		this.setState({ loading: true });
-
-		this.marvelService
+		marvelService
 			.getCharacters(9)
-			.then(newCharacters =>
-				this.setState(state => ({
-					characters: [
-						...state.characters,
-						...newCharacters.map(({ id, name, thumbnail }) => ({
-							id,
-							name,
-							thumbnail,
-						})),
-					],
-					error: false,
-					loading: false,
-				}))
-			)
-			.catch(this.onError);
+			.then(newCharacters => {
+				setCharacters(characters => [
+					...characters,
+					...newCharacters.map(({ id, name, thumbnail }) => ({
+						id,
+						name,
+						thumbnail,
+					})),
+				]);
+				setError(false);
+				setLoading(false);
+			})
+			.catch(catchError);
 	};
 
-	onError = () => {
-		this.setState({ error: true, loading: false });
-		this.props.onError();
+	useEffect(getNewCharacters, []);
+
+	const catchError = () => {
+		setError(true);
+		setLoading(false);
+		onError(setError);
 	};
 
-	itemsRefs = [];
-	setRef = elem => this.itemsRefs.push(elem);
+	const itemsRefs = [];
+	const setRef = elem => itemsRefs.push(elem);
 
-	onSelectedRef = i => {
-		this.itemsRefs.forEach(elem =>
-			elem.classList.remove('char__item_selected')
-		);
-		this.itemsRefs[i].classList.add('char__item_selected');
-		this.itemsRefs[i].focus();
+	const onSelectedRef = i => {
+		itemsRefs.forEach(elem => elem.classList.remove('char__item_selected'));
+		itemsRefs[i].classList.add('char__item_selected');
+		itemsRefs[i].focus();
 	};
 
-	render() {
-		const { characters, error, loading } = this.state;
-
-		return (
-			<div className='char__list'>
-				<ul className='char__grid'>
-					{characters.map((char, i) => {
-						const { id, ...data } = char;
-						return (
-							<CharListItem
-								{...data}
-								key={id}
-								setRef={this.setRef}
-								onSelectChar={() => {
-									this.props.onSelectChar(id);
-									this.onSelectedRef(i);
-								}}
-							/>
-						);
-					})}
-				</ul>
-				{loading ? <Spinner /> : null}
-				{error ? <ErrorMessage /> : null}
-				<button
-					disabled={loading}
-					className='button button__main button__long'
-					onClick={this.getNewCharacters}
-				>
-					<div className='inner'>load more</div>
-				</button>
-			</div>
-		);
-	}
-}
+	return (
+		<div className='char__list'>
+			<ul className='char__grid'>
+				{characters.map((char, i) => {
+					const { id, ...data } = char;
+					return (
+						<CharListItem
+							{...data}
+							key={id}
+							setRef={setRef}
+							onSelectChar={() => {
+								onSelectChar(id);
+								onSelectedRef(i);
+							}}
+						/>
+					);
+				})}
+			</ul>
+			{loading ? <Spinner /> : null}
+			{error ? <ErrorMessage /> : null}
+			<button
+				disabled={loading}
+				className='button button__main button__long'
+				onClick={getNewCharacters}
+			>
+				<div className='inner'>load more</div>
+			</button>
+		</div>
+	);
+};
 
 const CharListItem = ({ thumbnail, name, onSelectChar, setRef }) => {
 	let imageClasses = 'char__item-img';

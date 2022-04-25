@@ -1,4 +1,6 @@
 export const transformString = (str, maxLen = 200) => {
+	str = str ?? '';
+
 	if (str.length > maxLen) {
 		str = str.slice(0, maxLen - 4);
 

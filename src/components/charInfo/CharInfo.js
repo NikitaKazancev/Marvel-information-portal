@@ -1,78 +1,62 @@
-import { Component } from 'react/cjs/react.production.min';
+import { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
 import Spinner from '../../generalComponents/spinner/Spinner';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
-import MarvelService from '../../services/MarvelService';
+import { marvelService } from '../../services/MarvelService';
 
 import './charInfo.scss';
-class CharInfo extends Component {
-	marvelService = new MarvelService();
+const CharInfo = ({ charId, onError }) => {
+	const [character, setCharacter] = useState(null);
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState(false);
 
-	state = {
-		character: null,
-		loading: false,
-		error: false,
-	};
-
-	componentDidMount() {
-		this.updateChar();
-	}
-
-	componentDidUpdate(prevProps) {
-		if (prevProps.charId !== this.props.charId) this.updateChar();
-	}
-
-	updateChar = () => {
-		const { charId } = this.props;
+	const updateChar = () => {
 		if (!charId) return;
 
-		this.marvelService
+		marvelService
 			.getCharacter(charId)
-			.then(({ name, description, thumbnail, homepage, wiki, comics }) =>
-				this.setState({
-					character: {
-						name,
-						description,
-						thumbnail,
-						homepage,
-						wiki,
-						comics,
-					},
-					loading: false,
-					error: false,
-				})
-			)
-			.catch(this.catchError);
+			.then(({ name, description, thumbnail, homepage, wiki, comics }) => {
+				setCharacter({
+					name,
+					description,
+					thumbnail,
+					homepage,
+					wiki,
+					comics,
+				});
+				setLoading(false);
+				setError(false);
+			})
+			.catch(catchError);
 	};
 
-	catchError = () => {
-		this.setState({ error: true, loading: false });
-		this.props.onError();
+	useEffect(updateChar, [charId]); // check
+
+	const catchError = () => {
+		setError(true);
+		setLoading(false);
+		onError(setError);
 	};
 
-	render() {
-		const { character, loading, error } = this.state;
-
-		let content = character ? (
-			loading ? (
-				<Spinner />
-			) : (
-				<CharInfoContent {...character} />
-			)
+	let content = character ? (
+		loading ? (
+			<Spinner />
 		) : (
-			<Skeleton />
-		);
+			<CharInfoContent {...character} />
+		)
+	) : (
+		<Skeleton />
+	);
 
-		return (
-			<div className='char__info'>
-				{content}
-				{error ? <ErrorMessage /> : null}
-			</div>
-		);
-	}
-}
+	return (
+		<div className='char__info'>
+			{content}
+			{error ? <ErrorMessage /> : null}
+		</div>
+	);
+};
 
 const CharInfoContent = ({
 	name,

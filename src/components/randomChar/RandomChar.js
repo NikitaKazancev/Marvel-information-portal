@@ -1,6 +1,4 @@
-import { Component } from 'react/cjs/react.production.min';
-
-import { createPortal } from 'react-dom';
+import { Component } from 'react';
 
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../../generalComponents/spinner/Spinner';
@@ -61,17 +59,9 @@ export default class RandomChar extends Component {
 		return (
 			<div className='randomchar'>
 				{content}
-				{error ? (
-					<ErrorPortal>
-						<ErrorMessage />
-					</ErrorPortal>
-				) : null}
+				{error ? <ErrorMessage /> : null}
 				<RandomCharStatic onUpdateChar={this.updateChar} />
 			</div>
 		);
 	}
 }
-
-const ErrorPortal = ({ children }) => {
-	return createPortal(children, document.querySelector('body'));
-};

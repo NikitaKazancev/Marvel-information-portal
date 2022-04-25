@@ -1,16 +1,24 @@
-import { Component } from 'react/cjs/react.production.min';
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 import './errorMessage.scss';
 
-export default class ErrorMessage extends Component {
-	componentDidMount() {
-		setTimeout(
-			() => document.querySelector('.error').classList.add('error_show'),
-			0
-		);
-	}
+const ErrorMessage = () => {
+	const parent = document.querySelector('body');
 
-	render() {
-		return <div className='error'>Произошла ошибка, попробуйте снова</div>;
-	}
-}
+	useEffect(
+		() =>
+			setTimeout(
+				() => document.querySelector('.error').classList.add('error_show'),
+				0
+			),
+		[]
+	);
+
+	return createPortal(
+		<div className='error'>Произошла ошибка, попробуйте снова</div>,
+		parent
+	);
+};
+
+export default ErrorMessage;

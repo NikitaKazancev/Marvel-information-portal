@@ -63,3 +63,6 @@ export default class MarvelService {
 		};
 	};
 }
+
+const marvelService = new MarvelService();
+export { marvelService };
