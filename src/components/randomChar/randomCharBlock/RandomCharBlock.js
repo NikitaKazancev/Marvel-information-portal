@@ -15,6 +15,7 @@ const RandomCharBlock = ({ name, description, thumbnail, homepage, wiki }) => {
 					<a
 						href={homepage}
 						target='_blank'
+						rel='noreferrer'
 						className='button button__main'
 					>
 						<div className='inner'>homepage</div>
@@ -22,6 +23,7 @@ const RandomCharBlock = ({ name, description, thumbnail, homepage, wiki }) => {
 					<a
 						href={wiki}
 						target='_blank'
+						rel='noreferrer'
 						className='button button__secondary'
 					>
 						<div className='inner'>Wiki</div>

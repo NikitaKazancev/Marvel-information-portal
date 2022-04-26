@@ -1,46 +1,48 @@
-export default class MarvelService {
-	_apiKey = 'apikey=80d1823509a50e401b71216ea4fb0330';
-	_baseUrl = `https://gateway.marvel.com:443/v1/public/`;
-	maxId = 1011500;
-	minId = 1010701;
+import useHttp from '../hooks/http.hook';
 
-	getData = async url => {
-		const res = await fetch(url);
+import { random } from './functions';
 
-		if (!res.ok) {
-			throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-		}
+const useMarvelService = () => {
+	const { loading, error, request } = useHttp();
 
-		return await res.json();
-	};
+	const _apiKey = 'apikey=80d1823509a50e401b71216ea4fb0330';
+	const _baseUrl = `https://gateway.marvel.com:443/v1/public/`;
 
-	getCharacter = async id =>
-		await this.getData(
-			`${this._baseUrl}characters/${id}?${this._apiKey}`
-		).then(res => this._transformCharacterData(res.data.results[0]));
+	const charsAmount = 1561;
+	const comicsAmount = 51833;
 
-	getCharacters = async (amount = 9) => {
-		const {
-			maxId,
-			minId,
-			getData,
-			_baseUrl,
-			_apiKey,
-			_transformCharacterData,
-		} = this;
-
-		const randomOffset = Math.floor(Math.random() * (maxId - minId - amount));
-		return await getData(
-			`${_baseUrl}characters?limit=${amount}&offset=${randomOffset}&${_apiKey}`
-		).then(res => res.data.results.map(_transformCharacterData));
-	};
-
-	getRandomCharacter = async () =>
-		await this.getCharacter(
-			Math.floor(Math.random() * (this.maxId - this.minId) + this.minId)
+	const getCharacter = async id =>
+		await request(`${_baseUrl}characters/${id}?${_apiKey}`).then(res =>
+			_transformCharacterData(res.data.results[0])
 		);
 
-	_transformCharacterData = ({
+	const getData = async ({ dataName, amount, allAmount, transformFunc }) => {
+		const randomOffset = random({ end: allAmount });
+		return await request(
+			`${_baseUrl}${dataName}?limit=${amount}&offset=${randomOffset}&${_apiKey}`
+		).then(res => res.data.results.map(transformFunc));
+	};
+
+	const getComics = async (amount = 8) =>
+		await getData({
+			dataName: 'comics',
+			amount,
+			allAmount: comicsAmount,
+			transformFunc: _transformComicData,
+		});
+
+	const getCharacters = async (amount = 9) =>
+		await getData({
+			dataName: 'characters',
+			amount,
+			allAmount: charsAmount,
+			transformFunc: _transformCharacterData,
+		});
+
+	const getRandomCharacter = async () =>
+		await getCharacters(1).then(chars => chars[0]);
+
+	const _transformCharacterData = ({
 		id,
 		name,
 		description,
@@ -48,10 +50,10 @@ export default class MarvelService {
 		urls,
 		comics,
 	}) => {
-		if (description.includes('</p>')) description = description.slice(16, -4);
-		else
-			description =
-				description || `At the moment there's no info about ${name}`;
+		description = description.includes('</p>')
+			? description.slice(16, -4)
+			: description || `At the moment there's no description about ${name}`;
+
 		return {
 			id,
 			name,
@@ -62,7 +64,41 @@ export default class MarvelService {
 			comics: comics.items,
 		};
 	};
-}
 
-const marvelService = new MarvelService();
-export { marvelService };
+	const _transformComicData = ({
+		id,
+		title,
+		description,
+		pageCount,
+		thumbnail: { path, extension },
+		textObjects,
+		prices,
+	}) => ({
+		id,
+		title,
+		description:
+			description || `At the moment there's no description about ${title}`,
+		pageCount:
+			pageCount || "At the moment there's no info about number of pages",
+		thumbnail: `${path}.${extension}`,
+		language: textObjects.length
+			? textObjects[0]?.language || 'en-us'
+			: 'en-us',
+		price: prices.length
+			? prices[0].price
+				? `$ ${prices[0].price}`
+				: 'the price is not available'
+			: 'the price is not available',
+	});
+
+	return {
+		loading,
+		error,
+		getCharacter,
+		getCharacters,
+		getRandomCharacter,
+		getComics,
+	};
+};
+
+export default useMarvelService;

@@ -4,20 +4,18 @@ import propTypes from 'prop-types';
 import Spinner from '../../generalComponents/spinner/Spinner';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
-import { marvelService } from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
-const CharInfo = ({ charId, onError }) => {
+const CharInfo = ({ charId }) => {
 	const [character, setCharacter] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+
+	const { loading, error, getCharacter } = useMarvelService();
 
 	const updateChar = () => {
 		if (!charId) return;
-
-		marvelService
-			.getCharacter(charId)
-			.then(({ name, description, thumbnail, homepage, wiki, comics }) => {
+		getCharacter(charId).then(
+			({ name, description, thumbnail, homepage, wiki, comics }) => {
 				setCharacter({
 					name,
 					description,
@@ -26,19 +24,11 @@ const CharInfo = ({ charId, onError }) => {
 					wiki,
 					comics,
 				});
-				setLoading(false);
-				setError(false);
-			})
-			.catch(catchError);
+			}
+		);
 	};
 
-	useEffect(updateChar, [charId]); // check
-
-	const catchError = () => {
-		setError(true);
-		setLoading(false);
-		onError(setError);
-	};
+	useEffect(updateChar, [charId]);
 
 	let content = character ? (
 		loading ? (
@@ -85,6 +75,7 @@ const CharInfoContent = ({
 					<div className='char__btns'>
 						<a
 							target='_blank'
+							rel='noreferrer'
 							href={homepage}
 							className='button button__main'
 						>
@@ -92,6 +83,7 @@ const CharInfoContent = ({
 						</a>
 						<a
 							target='_blank'
+							rel='noreferrer'
 							href={wiki}
 							className='button button__secondary'
 						>

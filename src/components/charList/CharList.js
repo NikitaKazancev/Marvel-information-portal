@@ -3,42 +3,29 @@ import propTypes from 'prop-types';
 
 import Spinner from '../../generalComponents/spinner/Spinner';
 import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
-import { marvelService } from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charList.scss';
 
-const CharList = ({ onError, onSelectChar }) => {
+const CharList = ({ setSelectedChar }) => {
 	const [characters, setCharacters] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(false);
+
+	const { loading, error, getCharacters } = useMarvelService();
 
 	const getNewCharacters = () => {
-		setLoading(true);
-
-		marvelService
-			.getCharacters(9)
-			.then(newCharacters => {
-				setCharacters(characters => [
-					...characters,
-					...newCharacters.map(({ id, name, thumbnail }) => ({
-						id,
-						name,
-						thumbnail,
-					})),
-				]);
-				setError(false);
-				setLoading(false);
-			})
-			.catch(catchError);
+		getCharacters(9).then(newCharacters =>
+			setCharacters(characters => [
+				...characters,
+				...newCharacters.map(({ id, name, thumbnail }) => ({
+					id,
+					name,
+					thumbnail,
+				})),
+			])
+		);
 	};
 
 	useEffect(getNewCharacters, []);
-
-	const catchError = () => {
-		setError(true);
-		setLoading(false);
-		onError(setError);
-	};
 
 	const itemsRefs = [];
 	const setRef = elem => itemsRefs.push(elem);
@@ -60,7 +47,7 @@ const CharList = ({ onError, onSelectChar }) => {
 							key={id}
 							setRef={setRef}
 							onSelectChar={() => {
-								onSelectChar(id);
+								setSelectedChar(id);
 								onSelectedRef(i);
 							}}
 						/>
