@@ -13,7 +13,7 @@ const CharList = ({ setSelectedChar }) => {
 	const { loading, error, getCharacters } = useMarvelService();
 
 	const getNewCharacters = () => {
-		getCharacters(9).then(newCharacters =>
+		getCharacters().then(newCharacters =>
 			setCharacters(characters => [
 				...characters,
 				...newCharacters.map(({ id, name, thumbnail }) => ({
