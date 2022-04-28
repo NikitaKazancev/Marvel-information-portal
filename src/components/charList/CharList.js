@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 
-import Spinner from '../../generalComponents/spinner/Spinner';
-import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
+import { Spinner, ErrorMessage } from '../../generalComponents';
 import useMarvelService from '../../services/MarvelService';
 
 import './charList.scss';

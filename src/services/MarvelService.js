@@ -11,12 +11,31 @@ const useMarvelService = () => {
 	const charsAmount = 1561;
 	const comicsAmount = 51833;
 
-	const getCharacter = async id =>
-		await request(`${_baseUrl}characters/${id}?${_apiKey}`).then(res =>
-			_transformCharacterData(res.data.results[0])
+	const getDataById = async ({ id, dataName, transformFunc }) =>
+		await request(`${_baseUrl}${dataName}/${id}?${_apiKey}`).then(res =>
+			transformFunc(res.data.results[0])
 		);
 
-	const getData = async ({ dataName, amount, allAmount, transformFunc }) => {
+	const getCharacter = async id =>
+		await getDataById({
+			id,
+			dataName: 'characters',
+			transformFunc: _transformCharacterData,
+		});
+
+	const getComic = async id =>
+		await getDataById({
+			id,
+			dataName: 'comics',
+			transformFunc: _transformComicData,
+		});
+
+	const getMultipleData = async ({
+		dataName,
+		amount,
+		allAmount,
+		transformFunc,
+	}) => {
 		const randomOffset = random({ end: allAmount });
 		return await request(
 			`${_baseUrl}${dataName}?limit=${amount}&offset=${randomOffset}&${_apiKey}`
@@ -24,7 +43,7 @@ const useMarvelService = () => {
 	};
 
 	const getComics = async (amount = 8) =>
-		await getData({
+		await getMultipleData({
 			dataName: 'comics',
 			amount,
 			allAmount: comicsAmount,
@@ -32,7 +51,7 @@ const useMarvelService = () => {
 		});
 
 	const getCharacters = async (amount = 9) =>
-		await getData({
+		await getMultipleData({
 			dataName: 'characters',
 			amount,
 			allAmount: charsAmount,
@@ -78,8 +97,9 @@ const useMarvelService = () => {
 		title,
 		description:
 			description || `At the moment there's no description about ${title}`,
-		pageCount:
-			pageCount || "At the moment there's no info about number of pages",
+		pageCount: pageCount
+			? pageCount + ' pages'
+			: "At the moment there's no info about number of pages",
 		thumbnail: `${path}.${extension}`,
 		language: textObjects.length
 			? textObjects[0]?.language || 'en-us'
@@ -98,6 +118,7 @@ const useMarvelService = () => {
 		getCharacters,
 		getRandomCharacter,
 		getComics,
+		getComic,
 	};
 };
 

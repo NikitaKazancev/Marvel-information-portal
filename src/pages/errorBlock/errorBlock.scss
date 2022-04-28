@@ -1,0 +1,42 @@
+@import '../../style/variables.scss';
+
+.page404 {
+	box-sizing: border-box;
+	height: 60vh;
+	padding: 50px;
+	background-color: $main-color;
+	border-radius: 8px;
+	filter: grayscale(10%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&__glass {
+		height: 100%;
+		width: 100%;
+		border-radius: 8px;
+		background-color: #ffffff22;
+		backdrop-filter: blur(12px);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__content {
+		display: grid;
+		grid-template-rows: repeat(2, 1fr);
+		justify-items: center;
+		grid-gap: 30px;
+		font-size: 40px;
+		color: rgb(236, 236, 236);
+
+		a {
+			transition: 0.25s all;
+			cursor: pointer;
+
+			&:hover {
+				color: rgb(172, 172, 172);
+			}
+		}
+	}
+}

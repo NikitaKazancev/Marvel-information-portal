@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../../generalComponents/spinner/Spinner';
-import ErrorMessage from '../../generalComponents/errorMessage/ErrorMessage';
+import { Spinner, ErrorMessage } from '../../generalComponents';
 
 import './comicsList.scss';
 
@@ -29,8 +30,8 @@ const ComicsList = () => {
 	return (
 		<div className='comics__list'>
 			<ul className='comics__grid'>
-				{comics.map(({ id, ...data }) => {
-					return <Comic {...data} key={id} />;
+				{comics.map((comic, i) => {
+					return <Comic {...comic} key={i} />;
 				})}
 			</ul>
 			{loading ? <Spinner /> : null}
@@ -46,13 +47,13 @@ const ComicsList = () => {
 	);
 };
 
-const Comic = ({ thumbnail, title, price }) => (
+const Comic = ({ thumbnail, title, price, id }) => (
 	<li className='comics__item'>
-		<a href='#'>
+		<Link to={`/comics/${id}`}>
 			<img src={thumbnail} alt={title} className='comics__item-img' />
 			<div className='comics__item-name'>{title}</div>
 			<div className='comics__item-price'>{price}</div>
-		</a>
+		</Link>
 	</li>
 );
 
