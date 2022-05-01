@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import propTypes from 'prop-types';
 
 import { Spinner, ErrorMessage } from '../../generalComponents';
@@ -6,7 +6,7 @@ import Skeleton from '../skeleton/Skeleton';
 import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
-const CharInfo = ({ charId }) => {
+const CharInfo = memo(({ charId }) => {
 	const [character, setCharacter] = useState(null);
 
 	const { loading, error, getCharacter } = useMarvelService();
@@ -45,7 +45,7 @@ const CharInfo = ({ charId }) => {
 			{error ? <ErrorMessage /> : null}
 		</div>
 	);
-};
+});
 
 const CharInfoContent = ({
 	name,

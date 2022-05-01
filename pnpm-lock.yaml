@@ -13,6 +13,7 @@ specifiers:
   react-router: 5.3.1
   react-router-dom: 6.3.0
   react-scripts: 4.0.3
+  react-transition-group: ^4.4.2
   sass: ^1.38.0
   typescript: '>=3.2.1 <4.0.0 || >=4.0.0 <5.0.0'
   web-vitals: ^1.0.1
@@ -30,6 +31,7 @@ dependencies:
   react-router: 5.3.1_react@18.1.0
   react-router-dom: 6.3.0_react-dom@18.1.0+react@18.1.0
   react-scripts: 4.0.3_e92613dc02d0ffb837f57e70889bf23e
+  react-transition-group: 4.4.2_react-dom@18.1.0+react@18.1.0
   typescript: 4.6.3
   web-vitals: 1.1.2
 
@@ -4331,6 +4333,10 @@ packages:
       cssom: 0.3.8
     dev: false
 
+  /csstype/3.0.11:
+    resolution: {integrity: sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==}
+    dev: false
+
   /cyclist/1.0.1:
     resolution: {integrity: sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=}
     dev: false
@@ -4583,6 +4589,13 @@ packages:
     resolution: {integrity: sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA==}
     dependencies:
       utila: 0.4.0
+    dev: false
+
+  /dom-helpers/5.2.1:
+    resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
+    dependencies:
+      '@babel/runtime': 7.17.8
+      csstype: 3.0.11
     dev: false
 
   /dom-serializer/0.2.2:
@@ -9696,6 +9709,20 @@ packages:
       - webpack-command
       - webpack-hot-middleware
       - webpack-plugin-serve
+    dev: false
+
+  /react-transition-group/4.4.2_react-dom@18.1.0+react@18.1.0:
+    resolution: {integrity: sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==}
+    peerDependencies:
+      react: '>=16.6.0'
+      react-dom: '>=16.6.0'
+    dependencies:
+      '@babel/runtime': 7.17.8
+      dom-helpers: 5.2.1
+      loose-envify: 1.4.0
+      prop-types: 15.8.1
+      react: 18.1.0
+      react-dom: 18.1.0_react@18.1.0
     dev: false
 
   /react/18.1.0:

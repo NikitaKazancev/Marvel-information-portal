@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { ErrorBlock } from '../../pages';
 import { Spinner } from '../../generalComponents';
 
 import useMarvelService from '../../services/MarvelService';
 
 import './singleComic.scss';
+
+const ErrorBlock = lazy(() => import('../../pages/errorBlock/ErrorBlock'));
 
 const SingleComic = () => {
 	const { comicId } = useParams();
@@ -24,9 +25,7 @@ const SingleComic = () => {
 		return (
 			<ErrorBlock
 				messages={{
-					a:
-						"SORRY, THERE'S NO COMIC WITH SUCH ID " +
-						comicId.toUpperCase(),
+					a: `SORRY, THERE'S NO COMIC WITH SUCH ID (${comicId.toUpperCase()})`,
 					b: 'BACK TO ALL',
 				}}
 				to={'/comics'}

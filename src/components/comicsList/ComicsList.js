@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import useMarvelService from '../../services/MarvelService';
 import { Spinner, ErrorMessage } from '../../generalComponents';
@@ -27,13 +28,22 @@ const ComicsList = () => {
 
 	useEffect(getNewComics, []);
 
+	const timeout = 500;
+
 	return (
 		<div className='comics__list'>
-			<ul className='comics__grid'>
-				{comics.map((comic, i) => {
-					return <Comic {...comic} key={i} />;
-				})}
-			</ul>
+			<TransitionGroup component='ul' className='comics__grid'>
+				{comics.map((comic, i) => (
+					<CSSTransition
+						key={i}
+						timeout={timeout}
+						classNames={'item'}
+						mountOnEnter
+					>
+						<Comic {...comic} />
+					</CSSTransition>
+				))}
+			</TransitionGroup>
 			{loading ? <Spinner /> : null}
 			{error ? <ErrorMessage /> : null}
 			<button

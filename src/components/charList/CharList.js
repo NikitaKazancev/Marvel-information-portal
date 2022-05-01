@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import { Spinner, ErrorMessage } from '../../generalComponents';
 import useMarvelService from '../../services/MarvelService';
@@ -35,24 +36,32 @@ const CharList = ({ setSelectedChar }) => {
 		itemsRefs[i].focus();
 	};
 
+	const timeout = 500;
+
 	return (
 		<div className='char__list'>
-			<ul className='char__grid'>
+			<TransitionGroup component='ul' className='char__grid'>
 				{characters.map((char, i) => {
 					const { id, ...data } = char;
 					return (
-						<CharListItem
-							{...data}
+						<CSSTransition
 							key={id}
-							setRef={setRef}
-							onSelectChar={() => {
-								setSelectedChar(id);
-								onSelectedRef(i);
-							}}
-						/>
+							timeout={timeout}
+							classNames={'item'}
+							mountOnEnter
+						>
+							<CharListItem
+								{...data}
+								setRef={setRef}
+								onSelectChar={() => {
+									setSelectedChar(id);
+									onSelectedRef(i);
+								}}
+							/>
+						</CSSTransition>
 					);
 				})}
-			</ul>
+			</TransitionGroup>
 			{loading ? <Spinner /> : null}
 			{error ? <ErrorMessage /> : null}
 			<button

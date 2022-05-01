@@ -1,7 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+import { Spinner } from '../../generalComponents';
 import AppHeader from '../appHeader/AppHeader';
-import { MainPage, ComicsPage, ErrorBlock, ComicPage } from '../../pages';
+
+const ErrorBlock = lazy(() => import('../../pages/errorBlock/ErrorBlock'));
+const MainPage = lazy(() => import('../../pages/mainPage/MainPage'));
+const ComicsPage = lazy(() => import('../../pages/comicsPage/ComicsPage'));
+const ComicPage = lazy(() => import('../../pages/comicPage/ComicPage'));
 
 const App = () => {
 	return (
@@ -9,12 +15,14 @@ const App = () => {
 			<div className='app'>
 				<AppHeader />
 				<main>
-					<Routes>
-						<Route path='/' element={<MainPage />} />
-						<Route path='/comics' element={<ComicsPage />} />
-						<Route path='/comics/:comicId' element={<ComicPage />} />
-						<Route path='*' element={<ErrorBlock />} />
-					</Routes>
+					<Suspense fallback={<Spinner />}>
+						<Routes>
+							<Route path='/' element={<MainPage />} />
+							<Route path='/comics' element={<ComicsPage />} />
+							<Route path='/comics/:comicId' element={<ComicPage />} />
+							<Route path='*' element={<ErrorBlock />} />
+						</Routes>
+					</Suspense>
 				</main>
 			</div>
 		</Router>
