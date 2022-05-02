@@ -26,6 +26,7 @@ const ComicsList = () => {
 		});
 	};
 
+	// eslint-disable-next-line
 	useEffect(getNewComics, []);
 
 	const timeout = 500;

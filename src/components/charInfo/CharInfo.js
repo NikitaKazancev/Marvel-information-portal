@@ -27,6 +27,7 @@ const CharInfo = memo(({ charId }) => {
 		);
 	};
 
+	// eslint-disable-next-line
 	useEffect(updateChar, [charId]);
 
 	let content = character ? (

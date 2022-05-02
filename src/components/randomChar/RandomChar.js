@@ -26,6 +26,7 @@ const RandomChar = () => {
 		);
 	};
 
+	// eslint-disable-next-line
 	useEffect(updateChar, []);
 
 	const content = loading ? <Spinner /> : <RandomCharBlock {...character} />;

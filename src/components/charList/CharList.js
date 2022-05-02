@@ -25,6 +25,7 @@ const CharList = ({ setSelectedChar }) => {
 		);
 	};
 
+	// eslint-disable-next-line
 	useEffect(getNewCharacters, []);
 
 	const itemsRefs = [];

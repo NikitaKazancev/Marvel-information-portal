@@ -23,9 +23,12 @@ const SinglePage = ({ type, Component }) => {
 			case 'character':
 				getCharacter(id).then(newChar => setData(newChar));
 				break;
+			default:
+				throw new Error('Unexpected type of page');
 		}
 	};
 
+	// eslint-disable-next-line
 	useEffect(getNewData, [id]);
 
 	let content;
