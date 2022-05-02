@@ -14,7 +14,7 @@ import { ErrorMessage } from '../../generalComponents';
 import './charSearch.scss';
 
 const CharSearch = () => {
-	const [char, setCharId] = useState('first');
+	const [char, setCharId] = useState(undefined);
 	const { loading, error, getCharacterByName } = useMarvelService();
 
 	const onSubmit = name => {
@@ -22,7 +22,7 @@ const CharSearch = () => {
 	};
 
 	const searchResult =
-		char === 'first' ? null : !char ? (
+		char === undefined ? null : !char ? (
 			<div className='char-search__message char-search__message_error'>
 				The character was not found. Check the name and try again
 			</div>
@@ -73,7 +73,7 @@ const CharSearch = () => {
 					<FormikErrorMessage
 						name='name'
 						component='div'
-						className='char-search__message char-search__message_error'
+						className='char-search__form-error'
 					/>
 				</Form>
 			</Formik>

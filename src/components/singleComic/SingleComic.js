@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const SingleComic = ({
 	title,
@@ -10,6 +11,10 @@ const SingleComic = ({
 }) => {
 	return (
 		<div className='single-page'>
+			<Helmet>
+				<meta name='description' content={`Comic ${title}`} />
+				<title>{title}</title>
+			</Helmet>
 			<img src={thumbnail} alt={title} className='single-page__img' />
 			<div className='single-page__info'>
 				<h2 className='single-page__name'>{title}</h2>
