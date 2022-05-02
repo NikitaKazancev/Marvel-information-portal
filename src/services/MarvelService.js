@@ -23,6 +23,15 @@ const useMarvelService = () => {
 			transformFunc: _transformCharacterData,
 		});
 
+	const getCharacterByName = async name =>
+		await request(`${_baseUrl}characters?name=${name}&${_apiKey}`).then(
+			res => {
+				if (res.data.results.length)
+					return _transformCharacterData(res.data.results[0]);
+				return null;
+			}
+		);
+
 	const getComic = async id =>
 		await getDataById({
 			id,
@@ -119,6 +128,7 @@ const useMarvelService = () => {
 		getRandomCharacter,
 		getComics,
 		getComic,
+		getCharacterByName,
 	};
 };
 

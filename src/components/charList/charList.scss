@@ -44,6 +44,8 @@
 		color: #fff;
 	}
 	&__list {
+		grid-row-end: span 2;
+
 		.spinner-wrapper {
 			margin-top: 30px;
 		}

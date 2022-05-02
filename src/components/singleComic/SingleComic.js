@@ -1,41 +1,6 @@
-import { useState, useEffect, lazy } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { Spinner } from '../../generalComponents';
-
-import useMarvelService from '../../services/MarvelService';
-
-import './singleComic.scss';
-
-const ErrorBlock = lazy(() => import('../../pages/errorBlock/ErrorBlock'));
-
-const SingleComic = () => {
-	const { comicId } = useParams();
-	const { loading, error, getComic } = useMarvelService();
-	const [comic, setComic] = useState(null);
-
-	const getNewComic = () => {
-		getComic(comicId).then(newComic => setComic(newComic));
-	};
-
-	useEffect(getNewComic, [comicId]);
-
-	if (/\D/g.test(comicId)) return <ErrorBlock />;
-	if (error)
-		return (
-			<ErrorBlock
-				messages={{
-					a: `SORRY, THERE'S NO COMIC WITH SUCH ID (${comicId.toUpperCase()})`,
-					b: 'BACK TO ALL',
-				}}
-				to={'/comics'}
-			/>
-		);
-
-	return loading ? <Spinner /> : <ComicContent {...comic} />;
-};
-
-const ComicContent = ({
+const SingleComic = ({
 	title,
 	description,
 	pageCount,
@@ -44,16 +9,16 @@ const ComicContent = ({
 	price,
 }) => {
 	return (
-		<div className='single-comic'>
-			<img src={thumbnail} alt={title} className='single-comic__img' />
-			<div className='single-comic__info'>
-				<h2 className='single-comic__name'>{title}</h2>
-				<p className='single-comic__descr'>{description}</p>
-				<p className='single-comic__descr'>{pageCount}</p>
-				<p className='single-comic__descr'>Language: {language}</p>
-				<div className='single-comic__price'>$ {price}</div>
+		<div className='single-page'>
+			<img src={thumbnail} alt={title} className='single-page__img' />
+			<div className='single-page__info'>
+				<h2 className='single-page__name'>{title}</h2>
+				<p className='single-page__descr'>{description}</p>
+				<p className='single-page__descr'>{pageCount}</p>
+				<p className='single-page__descr'>Language: {language}</p>
+				<div className='single-page__price'>$ {price}</div>
 			</div>
-			<Link to='/comics' className='single-comic__back'>
+			<Link to='/comics' className='single-page__back'>
 				Back to all
 			</Link>
 		</div>

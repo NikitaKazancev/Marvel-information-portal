@@ -81,9 +81,9 @@ main {
 	}
 }
 
-.item {
+.fade {
 	&-enter {
-		transition: opacity 0.5s !important;
+		transition: opacity 5s !important;
 		opacity: 0;
 
 		&-active {

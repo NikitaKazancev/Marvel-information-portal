@@ -8,7 +8,7 @@ const useHttp = (
 	}
 ) => {
 	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(false);
+	const [error, setError] = useState(null);
 
 	const request = useCallback(
 		async (
@@ -31,18 +31,19 @@ const useHttp = (
 				const data = await res.json();
 
 				setLoading(false);
-				setError(false);
+				setError(null);
 				return data;
 			} catch (e) {
 				setLoading(false);
 				setError(e.message);
 
-				setTimeout(() => {
-					document
-						.querySelector(errorElem)
-						.classList.remove(activeErrorClass);
-					setTimeout(() => setError({ error: false }), 1000);
-				}, timing);
+				if (document.querySelector(errorElem))
+					setTimeout(() => {
+						document
+							.querySelector(errorElem)
+							.classList.remove(activeErrorClass);
+						setTimeout(() => setError({ error: null }), 1000);
+					}, timing);
 
 				throw e;
 			}

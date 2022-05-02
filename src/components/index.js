@@ -7,6 +7,8 @@ import ComicsList from './comicsList/ComicsList';
 import RandomChar from './randomChar/RandomChar';
 import Skeleton from './skeleton/Skeleton';
 import SingleComic from './singleComic/SingleComic';
+import CharSearch from './charSearch/CharSearch';
+import SingleChar from './singleChar/SingleChar';
 
 export {
 	App,
@@ -18,4 +20,6 @@ export {
 	RandomChar,
 	Skeleton,
 	SingleComic,
+	CharSearch,
+	SingleChar,
 };

@@ -7,7 +7,11 @@ import AppHeader from '../appHeader/AppHeader';
 const ErrorBlock = lazy(() => import('../../pages/errorBlock/ErrorBlock'));
 const MainPage = lazy(() => import('../../pages/mainPage/MainPage'));
 const ComicsPage = lazy(() => import('../../pages/comicsPage/ComicsPage'));
-const ComicPage = lazy(() => import('../../pages/comicPage/ComicPage'));
+const SinglePage = lazy(() => import('../../pages/singlePage/SinglePage'));
+const SingleComic = lazy(() =>
+	import('../../components/singleComic/SingleComic')
+);
+const SingleChar = lazy(() => import('../../components/singleChar/SingleChar'));
 
 const App = () => {
 	return (
@@ -19,7 +23,21 @@ const App = () => {
 						<Routes>
 							<Route path='/' element={<MainPage />} />
 							<Route path='/comics' element={<ComicsPage />} />
-							<Route path='/comics/:comicId' element={<ComicPage />} />
+							<Route
+								path='/comics/:id'
+								element={
+									<SinglePage type='comic' Component={SingleComic} />
+								}
+							/>
+							<Route
+								path='/characters/:id'
+								element={
+									<SinglePage
+										type='character'
+										Component={SingleChar}
+									/>
+								}
+							/>
 							<Route path='*' element={<ErrorBlock />} />
 						</Routes>
 					</Suspense>

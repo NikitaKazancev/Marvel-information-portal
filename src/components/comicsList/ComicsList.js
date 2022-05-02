@@ -37,7 +37,7 @@ const ComicsList = () => {
 					<CSSTransition
 						key={i}
 						timeout={timeout}
-						classNames={'item'}
+						classNames={'fade'}
 						mountOnEnter
 					>
 						<Comic {...comic} />

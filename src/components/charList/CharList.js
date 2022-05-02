@@ -47,7 +47,7 @@ const CharList = ({ setSelectedChar }) => {
 						<CSSTransition
 							key={id}
 							timeout={timeout}
-							classNames={'item'}
+							classNames={'fade'}
 							mountOnEnter
 						>
 							<CharListItem
